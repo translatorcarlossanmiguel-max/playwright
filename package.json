@@ -1,0 +1,21 @@
+{
+  "name": "playwright",
+  "version": "1.0.0",
+  "description": "QA Automation Engineer Challenge - Moveo. Candidate: Carlos San Miguel",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "test:headed": "npx playwright test --headed",
+    "beautify": "js-beautify \"**/*.ts\" \"**/*.js\" --replace"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.55.1",
+    "js-beautify": "^1.15.4",
+    "playwright": "^1.55.1",
+    "typescript": "^5.9.2"
+  }
+}

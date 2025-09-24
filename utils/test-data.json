@@ -1,0 +1,19 @@
+{
+  "validUser": {
+    "username": "standard_user",
+    "password": "secret_sauce"
+  },
+  "blockedUser": {
+    "username": "locked_out_user",
+    "password": "secret_sauce"
+  },
+  "invalidUser": {
+    "username": "invalid_user",
+    "password": "wrong_password"
+  },
+  "checkoutInfo": {
+    "firstName": "Carlos",
+    "lastName": "Perez",
+    "postalCode": "12345"
+  }
+}
