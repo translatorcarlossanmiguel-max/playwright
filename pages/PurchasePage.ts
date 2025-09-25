@@ -4,10 +4,6 @@ import testData from '../utils/test-data.json';
 export class PurchasePage {
     constructor(private page: Page) { }
 
-    async goto() {
-        await this.page.goto('/inventory.html');
-    }
-
     async inventoryPage() {
         await this.page.goto('/inventory.html');
     }
@@ -106,19 +102,48 @@ export class PurchasePage {
         await this.page.fill('[data-test="firstName"]', testData.checkoutInfo.firstName);
         await this.page.fill('[data-test="lastName"]', testData.checkoutInfo.lastName);
         await this.page.click('[data-test="continue"]')
-        
+
         await this.page.locator('[data-test="checkout-info-container"] div').filter({ hasText: 'Error: Postal Code is required' }).nth(2)
-        .isVisible() || (() => { throw new Error('❌ Error message not displayed for missing postal code'); })();
+            .isVisible() || (() => { throw new Error('❌ Error message not displayed for missing postal code'); })();
 
         await expect(this.page).toHaveURL(/checkout-step-one.html/);
         await this.page.locator('[data-test="error-button"]').click();
         await expect(
             this.page.locator('[data-test="checkout-info-container"] div').filter({ hasText: 'Error: Postal Code is required' })
         ).not.toBeVisible();
-        
+
         await this.page.fill('[data-test="postalCode"]', testData.checkoutInfo.postalCode);
         await this.page.click('[data-test="continue"]');
 
         await expect(this.page).toHaveURL(/checkout-step-two.html/);
     };
 }
+
+// Locators usados en PurchasePage.ts
+
+// Inventory page/product locators
+// '[data-test="inventory-list"] div'
+// '.inventory_item_name'
+// '.inventory_item_price'
+// '[data-test="remove-sauce-labs-backpack"]'
+// '[data-test="add-to-cart-sauce-labs-backpack"]'
+
+// Cart locators
+// '[data-test="inventory-item"]'
+// '[data-test="inventory-item-price"]'
+// '[data-test="secondary-header"]'
+// '[data-test="shopping-cart-link"]'
+
+// Checkout locators
+// '[data-test="checkout"]'
+// '[data-test="title"]'
+// '[data-test="firstName"]'
+// '[data-test="lastName"]'
+// '[data-test="postalCode"]'
+// '[data-test="continue"]'
+// '[data-test="subtotal-label"]'
+// '[data-test="finish"]'
+// '[data-test="complete-header"]'
+// '[data-test="complete-text"]'
+// '[data-test="checkout-info-container"] div'
+// '[data-test="error-button"]'
