@@ -4,7 +4,6 @@ export const LOCATORS = {
         password: '[data-test="password"]',
         loginButton: '[data-test="login-button"]',
         errorMessage: '[data-test="error"]',
-
     },
     inventory: {
         list: '[data-test="inventory-list"]',
@@ -18,7 +17,7 @@ export const LOCATORS = {
     cart:{
         cartItem: '[data-test="inventory-item"]',
         cartPrice: '[data-test="inventory-item-price"]',
-        cartHeader: '[data-test="secondary-header"]',
+        header: '[data-test="secondary-header"]',
         cartLink: '[data-test="shopping-cart-link"]',
     },
     checkout: {
@@ -36,12 +35,3 @@ export const LOCATORS = {
         errorButton: '[data-test="error-button"]'
     }
 };
-
-
-// Checkout locators
-
-// '[data-test="finish"]'
-// '[data-test="complete-header"]'
-// '[data-test="complete-text"]'
-// '[data-test="checkout-info-container"] div'
-// '[data-test="error-button"]'

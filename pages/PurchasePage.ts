@@ -1,5 +1,6 @@
 import { Page, expect } from '@playwright/test';
 import testData from '../utils/test-data.json';
+import { LOCATORS } from '../utils/locators';
 
 export class PurchasePage {
     constructor(private page: Page) { }
@@ -10,26 +11,26 @@ export class PurchasePage {
 
     async buyProduct(productName: string) {
 
-        const productLocator = this.page.locator('[data-test="inventory-list"] div')
+        const productLocator = this.page.locator(LOCATORS.inventory.list)
             .filter({ hasText: productName });
 
-        const name = await productLocator.locator('.inventory_item_name').textContent();
-        const price = await productLocator.locator('.inventory_item_price').textContent();
+        const name = await productLocator.locator(LOCATORS.inventory.itemName).textContent();
+        const price = await productLocator.locator(LOCATORS.inventory.itemPrice).textContent();
 
-        const removeButton = this.page.locator('[data-test="remove-sauce-labs-backpack"]');
+        const removeButton = this.page.locator(LOCATORS.inventory.removeButton);
 
-        await this.page.click('[data-test="add-to-cart-sauce-labs-backpack"]');
+        await this.page.click(LOCATORS.inventory.addBackpack);
         await expect(removeButton).toBeVisible();
 
         return { name, price };
     }
 
     async goToCart() {
-        const inventoryItem = this.page.locator('[data-test="inventory-item"]');
-        const inventoryPrice = this.page.locator('[data-test="inventory-item-price"]');
+        const inventoryItem = this.page.locator(LOCATORS.inventory.item);
+        const inventoryPrice = this.page.locator(LOCATORS.inventory.itemPrice);
 
-        const cartHeader = this.page.locator('[data-test="secondary-header"]');
-        await this.page.click('[data-test="shopping-cart-link"]');
+        const cartHeader = this.page.locator(LOCATORS.cart.header);
+        await this.page.click(LOCATORS.inventory.cartIcon);
 
         await expect(inventoryItem).toBeVisible();
         await expect(inventoryPrice).toBeVisible();
@@ -38,32 +39,32 @@ export class PurchasePage {
     }
 
     async verifyProductInCart(expectedName: string, expectedPrice: string) {
-        const cartName = await this.page.textContent('.inventory_item_name');
-        const cartPrice = await this.page.textContent('.inventory_item_price');
+        const cartName = await this.page.textContent(LOCATORS.cart.cartItem);
+        const cartPrice = await this.page.textContent(LOCATORS.cart.cartPrice);
 
         expect(cartName).toBe(expectedName);
         expect(cartPrice).toBe(expectedPrice);
     }
 
     async completeCheckout() {
-        await this.page.click('[data-test="checkout"]');
+        await this.page.click(LOCATORS.checkout.checkoutButton);
 
-        await expect(this.page.locator('[data-test="title"]')).toHaveText('Checkout: Your Information');
+        await expect(this.page.locator(LOCATORS.checkout.title)).toHaveText('Checkout: Your Information');
 
-        await this.page.fill('[data-test="firstName"]', testData.checkoutInfo.firstName);
-        await this.page.fill('[data-test="lastName"]', testData.checkoutInfo.lastName);
-        await this.page.fill('[data-test="postalCode"]', testData.checkoutInfo.postalCode);
+        await this.page.fill(LOCATORS.checkout.firstName, testData.checkoutInfo.firstName);
+        await this.page.fill(LOCATORS.checkout.lastName, testData.checkoutInfo.lastName);
+        await this.page.fill(LOCATORS.checkout.postalCode, testData.checkoutInfo.postalCode);
         await expect(this.page).toHaveURL(/checkout-step-one.html/);
 
-        await this.page.click('[data-test="continue"]');
+        await this.page.click(LOCATORS.checkout.continueButton);
     }
 
     async checkoutOverview(expectedName: string, expectedPrice: string) {
-        const cartName = await this.page.textContent('.inventory_item_name');
-        const cartPrice = await this.page.textContent('.inventory_item_price');
-        const subTotalPrice = await this.page.locator('[data-test="subtotal-label"]').textContent();
+        const cartName = await this.page.textContent(LOCATORS.cart.cartItem);
+        const cartPrice = await this.page.textContent(LOCATORS.cart.cartPrice);
+        const subTotalPrice = await this.page.locator(LOCATORS.checkout.subtotalLabel).textContent();
 
-        await expect(this.page.locator('[data-test="title"]')).toHaveText('Checkout: Overview');
+        await expect(this.page.locator(LOCATORS.checkout.title)).toHaveText('Checkout: Overview');
 
         await this.verifyProductInCart(expectedName, expectedPrice);
 
@@ -74,21 +75,21 @@ export class PurchasePage {
     }
 
     async completedCheckout() {
-        await this.page.click('[data-test="finish"]');
+        await this.page.click(LOCATORS.checkout.finishButton);
 
-        const title = this.page.locator('[data-test="title"]');
+        const title = this.page.locator(LOCATORS.checkout.title);
         await expect(title)
             .toHaveText('Checkout: Complete!');
         await expect(title)
             .toBeVisible();
 
-        const completeHeader = this.page.locator('[data-test="complete-header"]');
+        const completeHeader = this.page.locator(LOCATORS.checkout.completeHeader);
         await expect(completeHeader)
             .toHaveText('Thank you for your order!');
         await expect(completeHeader)
             .toBeVisible();
 
-        const completeText = this.page.locator('[data-test="complete-text"]');
+        const completeText = this.page.locator(LOCATORS.checkout.completeText);
         await expect(completeText)
             .toHaveText('Your order has been dispatched, and will arrive just as fast as the pony can get there!');
         await expect(completeText)
@@ -98,52 +99,24 @@ export class PurchasePage {
 
     async incompleteCheckout() {
 
-        await this.page.click('[data-test="checkout"]');
-        await this.page.fill('[data-test="firstName"]', testData.checkoutInfo.firstName);
-        await this.page.fill('[data-test="lastName"]', testData.checkoutInfo.lastName);
-        await this.page.click('[data-test="continue"]')
+        await this.page.click(LOCATORS.checkout.checkoutButton);
+        await this.page.fill(LOCATORS.checkout.firstName, testData.checkoutInfo.firstName);
+        await this.page.fill(LOCATORS.checkout.lastName, testData.checkoutInfo.lastName);
+        await this.page.click(LOCATORS.checkout.continueButton);
 
-        await this.page.locator('[data-test="checkout-info-container"] div').filter({ hasText: 'Error: Postal Code is required' }).nth(2)
+        await this.page.locator(LOCATORS.checkout.checkoutInfoContainer).filter({ hasText: 'Error: Postal Code is required' })
             .isVisible() || (() => { throw new Error('❌ Error message not displayed for missing postal code'); })();
 
         await expect(this.page).toHaveURL(/checkout-step-one.html/);
-        await this.page.locator('[data-test="error-button"]').click();
+        await this.page.locator(LOCATORS.checkout.errorButton).click();
         await expect(
-            this.page.locator('[data-test="checkout-info-container"] div').filter({ hasText: 'Error: Postal Code is required' })
+            this.page.locator(LOCATORS.checkout.checkoutInfoContainer).filter({ hasText: 'Error: Postal Code is required' })
         ).not.toBeVisible();
 
-        await this.page.fill('[data-test="postalCode"]', testData.checkoutInfo.postalCode);
-        await this.page.click('[data-test="continue"]');
+        await this.page.fill(LOCATORS.checkout.postalCode, testData.checkoutInfo.postalCode);
+        await this.page.click(LOCATORS.checkout.continueButton);
 
         await expect(this.page).toHaveURL(/checkout-step-two.html/);
     };
 }
 
-// Locators usados en PurchasePage.ts
-
-// Inventory page/product locators
-// '[data-test="inventory-list"] div'
-// '.inventory_item_name'
-// '.inventory_item_price'
-// '[data-test="remove-sauce-labs-backpack"]'
-// '[data-test="add-to-cart-sauce-labs-backpack"]'
-
-// Cart locators
-// '[data-test="inventory-item"]'
-// '[data-test="inventory-item-price"]'
-// '[data-test="secondary-header"]'
-// '[data-test="shopping-cart-link"]'
-
-// Checkout locators
-// '[data-test="checkout"]'
-// '[data-test="title"]'
-// '[data-test="firstName"]'
-// '[data-test="lastName"]'
-// '[data-test="postalCode"]'
-// '[data-test="continue"]'
-// '[data-test="subtotal-label"]'
-// '[data-test="finish"]'
-// '[data-test="complete-header"]'
-// '[data-test="complete-text"]'
-// '[data-test="checkout-info-container"] div'
-// '[data-test="error-button"]'
