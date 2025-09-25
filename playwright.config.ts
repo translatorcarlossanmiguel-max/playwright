@@ -6,7 +6,7 @@ export default defineConfig({
     fullyParallel: true,
     use: {
         baseURL: 'https://www.saucedemo.com',
-        headless: true,
+        headless: false,
         viewport: { width: 1280, height: 720 },
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',

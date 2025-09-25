@@ -8,6 +8,10 @@ export class PurchasePage {
         await this.page.goto('/inventory.html');
     }
 
+    async inventoryPage() {
+        await this.page.goto('/inventory.html');
+    }
+
     async buyProduct(productName: string) {
 
         const productLocator = this.page.locator('[data-test="inventory-list"] div')
@@ -117,5 +121,4 @@ export class PurchasePage {
 
         await expect(this.page).toHaveURL(/checkout-step-two.html/);
     };
-        
 }

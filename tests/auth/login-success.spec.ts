@@ -1,10 +1,14 @@
-import { expect, test } from '@playwright/test';
+import { test as base } from '@playwright/test';
 import { LoginPage } from '../../pages/LoginPage';
 
-test('Successful login', async ({ page, context }) => {
+const test = base.extend<{ loginPage: LoginPage }>({
+  loginPage: async ({ page, context }, use) => {
     const loginPage = new LoginPage(page, context);
-    await loginPage.goto();
-    await loginPage.loginWithValidUser(context);
+    await loginPage.open();
+    await use(loginPage);
+  }
+});
 
-  
+test('Successful login', async ({ loginPage }) => {
+    await loginPage.loginWithValidUser();
 });

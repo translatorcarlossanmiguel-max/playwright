@@ -1,5 +1,6 @@
-import { expect, Page, BrowserContext } from '@playwright/test';
+import { expect, Page, BrowserContext, Cookie } from '@playwright/test';
 import testData from '../utils/test-data.json';
+import { getSessionUsernameCookie } from '../utils/cookies';
 
 export class LoginPage {
     readonly page: Page;
@@ -9,22 +10,20 @@ export class LoginPage {
         this.page = page;
         this.context = context;
     }
+    
+  async open() {
+    await this.page.goto('/');
+  }
 
-    async goto() {
-        await this.page.goto('/');
-    }
-
-    async loginWithValidUser(context: BrowserContext) {
+       async loginWithValidUser(): Promise<Cookie> {
         await this.page.fill('[data-test="username"]', testData.validUser.username);
         await this.page.fill('[data-test="password"]', testData.validUser.password);
         await this.page.click('[data-test="login-button"]');
 
         await expect(this.page).toHaveURL(/inventory\.html$/);
-       
-        // Capture cookies
-        const cookies = await context.cookies();
-        const sessionCookie = cookies.find(c => c.name === 'session-username');
 
+        // Capture cookies
+        const sessionCookie = await getSessionUsernameCookie(this.context);
         if (!sessionCookie) {
             throw new Error('❌ Session cookie not found after login!');
         }
@@ -40,11 +39,11 @@ export class LoginPage {
         const items = inventoryList.locator('[data-test="inventory-item"]');
         const itemCount = await items.count();
         expect(itemCount).toBeGreaterThan(0);
-        
+
         return sessionCookie;
     }
 
-    async loginWithBlockedUser(context: BrowserContext) {
+  async loginWithBlockedUser(): Promise<void> {
         const errorSelector = '[data-test="error"]';
         const errorLocator = this.page.locator(errorSelector);
 
@@ -58,12 +57,11 @@ export class LoginPage {
         await expect(this.page).not.toHaveURL(/inventory.html/);
         await expect(this.page).toHaveURL(/\/$/);
 
-        const cookies = await context.cookies();
-        const sessionCookie = cookies.find(c => c.name === 'session-username');
+        const sessionCookie = await getSessionUsernameCookie(this.context);
         expect(sessionCookie?.value).toBe('locked_out_user');
     }
 
-    async loginWithInvalidUser(context: BrowserContext) {
+    async loginWithInvalidUser(): Promise<void> {
         const errorSelector = '[data-test="error"]';
         const errorLocator = this.page.locator(errorSelector);
 
@@ -77,8 +75,7 @@ export class LoginPage {
         await expect(this.page).not.toHaveURL(/inventory.html/);
         await expect(this.page).toHaveURL(/\/$/);
 
-        const cookies = await context.cookies();
-        const sessionCookie = cookies.find(c => c.name === 'session-username');
+        const sessionCookie = await getSessionUsernameCookie(this.context);
         expect(sessionCookie).toBeUndefined();
 
     }

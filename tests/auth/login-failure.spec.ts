@@ -1,15 +1,17 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page, BrowserContext } from '@playwright/test';
 import { LoginPage } from '../../pages/LoginPage';
 
-test('Invalid login - Blocked user', async ({ page, context }) => {
-    const loginPage = new LoginPage(page, context);
+let loginPage: LoginPage;
 
-    await loginPage.goto();
-    await loginPage.loginWithBlockedUser(context);
+test.beforeEach(async ({ page, context }) => {
+    loginPage = new LoginPage(page, context);
+    await loginPage.open();
 });
-test('Invalid login - Invalid user', async ({ page, context }) => {
-    const loginPage = new LoginPage(page, context);
 
-    await loginPage.goto();
-    await loginPage.loginWithInvalidUser(context);
+test('Invalid login - Blocked user', async () => {
+    await loginPage.loginWithBlockedUser();
+});
+
+test('Invalid login - Invalid user', async () => {
+    await loginPage.loginWithInvalidUser();
 });
