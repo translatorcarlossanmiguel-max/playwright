@@ -74,3 +74,14 @@ npx playwright test tests/auth/login-success.spec.ts
 
 - Puedes cambiar la configuración de ejecución en `playwright.config.ts`.
 - Los videos, screenshots y trazas se guardan solo en caso de fallo.
+
+## 🛠️ Estabilización en CI
+
+Para estabilizar la suite en CI:
+- Se habilitan **screenshots**, **videos** y **trazas** solo en fallos (`screenshot: 'only-on-failure'`, `video: 'retain-on-failure'`, `trace: 'retain-on-failure'`).
+- Se usan **reintentos automáticos** (`retries`) para pruebas intermitentes.
+- Puedes analizar fallos usando el **trace viewer** con:
+  ```bash
+  npx playwright show-trace trace.zip
+  ```
+- Ajusta el número de **workers** y el modo **headless** para entornos CI según recursos disponibles.
