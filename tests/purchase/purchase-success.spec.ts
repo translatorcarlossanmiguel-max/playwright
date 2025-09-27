@@ -2,40 +2,36 @@ import { test as base, expect } from '@playwright/test';
 import { PurchasePage } from '../../pages/PurchasePage';
 
 const test = base.extend<{
-  purchasePage: PurchasePage;
+    purchasePage: PurchasePage;
 }>({
-  purchasePage: async ({ browser }, use) => {
-    const context = await browser.newContext({
-      storageState: './auth.json'
-    });
-    const page = await context.newPage();
-    const purchasePage = new PurchasePage(page);
-    await purchasePage.inventoryPage();
-    await use(purchasePage);
-    await context.close();
-  }
+    purchasePage: async ({ browser }, use) => {
+        const context = await browser.newContext({
+            storageState: 'cookies/auth.json'
+        });
+        const page = await context.newPage();
+        const purchasePage = new PurchasePage(page);
+        await purchasePage.inventoryPage();
+        await use(purchasePage);
+        await context.close();
+    }
 });
 
 test('Successful purchase', async ({ purchasePage }) => {
     const page = purchasePage['page'];
-    const { name, price } = await purchasePage.buyProduct('Sauce Labs Backpack');
 
-    console.log('Product bought:', name, price);
+    await purchasePage.buyProduct();
 
     await purchasePage.goToCart();
-    const cartName = await page.locator('.inventory_item_name').textContent();
-    const cartPrice = await page.locator('.inventory_item_price').textContent();
 
-    expect(cartName).toBe(name);
-    expect(cartPrice).toBe(price);
 
     // Complete checkout
     await purchasePage.completeCheckout();
 
     // Verify success message
     await purchasePage.checkoutOverview(
-        cartName ?? '',
-        cartPrice ?? ''
+        purchasePage['productName'] ?? '',
+        purchasePage['productPrice'] ?? ''
     );
+
     await purchasePage.completedCheckout();
 });

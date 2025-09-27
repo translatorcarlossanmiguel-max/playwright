@@ -1,8 +1,8 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-    retries: 2,
-    workers: 1,
+    retries: 0,
+    workers: 2,
     fullyParallel: true,
     use: {
         baseURL: 'https://www.saucedemo.com',

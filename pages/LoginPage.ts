@@ -3,7 +3,6 @@ import testData from '../utils/test-data.json';
 import { getSessionUsernameCookie } from '../utils/cookies';
 import { LOCATORS } from '../utils/locators';
 
-
 export class LoginPage {
     readonly page: Page;
     readonly context: BrowserContext;
@@ -32,7 +31,7 @@ export class LoginPage {
 
         expect(sessionCookie?.value).toBe('standard_user');
         expect(sessionCookie?.domain).toBe('www.saucedemo.com');
-        expect(sessionCookie?.expires).toBeGreaterThan(0);
+        expect(sessionCookie?.expires).toBeGreaterThan(1700000000);
         console.log('✅ Session cookie found:', sessionCookie?.value, sessionCookie?.domain, sessionCookie?.expires);
 
         // Verifica que el inventario esté presente y tenga al menos un item
@@ -41,7 +40,7 @@ export class LoginPage {
         const items = inventoryList.locator(LOCATORS.inventory.item);
         const itemCount = await items.count();
         expect(itemCount).toBeGreaterThan(0);
-
+                        
         return sessionCookie;
     }
 
