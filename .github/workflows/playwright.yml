@@ -25,8 +25,8 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright tests (headless for CI)
-        run: npx playwright test
+      - name: Run Playwright tests (generate HTML report)
+        run: npx playwright test --reporter=html
 
       - name: Upload Playwright report
         if: always()
