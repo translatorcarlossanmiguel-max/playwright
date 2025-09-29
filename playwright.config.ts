@@ -8,8 +8,7 @@ const PROD = process.env.ENV || 'PROD';
 
 const envUrls: Record<string, string> = {
     DEV: 'https://dev.saucedemo.com',
-    QA: 'https://qa.saucedemo.com',
-    PROD: 'https://www.saucedemo.com'
+    QA: 'https://www.saucedemo.com', 
 };
 
 const ENV = (process.env.ENV || 'QA').toUpperCase();
