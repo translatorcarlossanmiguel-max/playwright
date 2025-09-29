@@ -85,3 +85,12 @@ Para estabilizar la suite en CI:
   npx playwright show-trace trace.zip
   ```
 - Ajusta el número de **workers** y el modo **headless** para entornos CI según recursos disponibles.
+
+## Ejecutar manualmente el workflow en GitHub
+
+1. Ve a la pestaña **Actions** de tu repositorio en GitHub.
+2. Selecciona el workflow llamado **Playwright Tests**.
+3. Haz clic en **Run workflow** (Ejecutar workflow) en la esquina superior derecha.
+4. Elige la rama (por ejemplo, `main`) y haz clic en el botón para ejecutar el workflow manualmente.
+
+Esto ejecutará las pruebas en CI usando la configuración definida en `.github/workflows/playwright.yml`.
