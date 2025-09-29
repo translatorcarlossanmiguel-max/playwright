@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-videos
-          path: test-results/**/*.mp4
+          path: test-results/**/*.webm
 
       - name: Upload Playwright traces
         if: always()
