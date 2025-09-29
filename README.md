@@ -44,6 +44,13 @@ npm ci
 npx playwright test
 ```
 
+> **Nota:** Por configuración local, este comando abrirá el navegador (modo headed).  
+> Para ejecutar las pruebas en modo headless (sin abrir el navegador), usa:
+
+```bash
+npx playwright test --headless
+```
+
 ## Ejecutar todas las pruebas en modo headed (navegador visible)
 
 ```bash
@@ -53,13 +60,6 @@ O usando el script:
 ```bash
 npm run test:headed
 ```
-
-## Ejecutar todas las pruebas en modo headless
-
-```bash
-npx playwright test --headless
-```
-
 ## Ejecutar un solo spec
 
 ```bash
@@ -69,6 +69,15 @@ Ejemplo:
 ```bash
 npx playwright test tests/auth/login-success.spec.ts
 ```
+
+## Depuración de pruebas
+
+Para depurar una prueba y pausar en cada paso, usa:
+
+```bash
+npx playwright test --debug
+```
+Esto abrirá el navegador y la interfaz de Playwright Inspector para depuración interactiva.
 
 ## Notas
 
