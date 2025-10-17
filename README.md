@@ -1,5 +1,5 @@
 # Playwright
-QA Automation Engineer Challenge - Moveo  
+QA Automation Engineer Challenge  
 Candidate: Carlos San Miguel
 
 # Playwright E2E Tests
